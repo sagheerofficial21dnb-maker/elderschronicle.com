@@ -1,0 +1,423 @@
+const fs = require('fs');
+const path = require('path');
+const { execSync } = require('child_process');
+
+const svg = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1600 900" width="1600" height="900">
+  <defs>
+    <!-- Background Gradient -->
+    <linearGradient id="bgNavy" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#081426"/>
+      <stop offset="45%" stop-color="#0D1E36"/>
+      <stop offset="80%" stop-color="#0B1A30"/>
+      <stop offset="100%" stop-color="#060E1C"/>
+    </linearGradient>
+
+    <!-- Gold Foil Gradients -->
+    <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="80%">
+      <stop offset="0%" stop-color="#ECC66D"/>
+      <stop offset="25%" stop-color="#D9A84E"/>
+      <stop offset="50%" stop-color="#FCE5A2"/>
+      <stop offset="75%" stop-color="#B88628"/>
+      <stop offset="100%" stop-color="#E5BA5F"/>
+    </linearGradient>
+
+    <linearGradient id="goldBright" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFF2C6"/>
+      <stop offset="40%" stop-color="#E2B755"/>
+      <stop offset="100%" stop-color="#9E6E1D"/>
+    </linearGradient>
+
+    <linearGradient id="goldDeep" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#DEB04C"/>
+      <stop offset="50%" stop-color="#936417"/>
+      <stop offset="100%" stop-color="#553807"/>
+    </linearGradient>
+
+    <!-- Parchment Gradients -->
+    <linearGradient id="parchmentCard" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FAF6ED"/>
+      <stop offset="60%" stop-color="#F3EAD7"/>
+      <stop offset="100%" stop-color="#E7DAC1"/>
+    </linearGradient>
+
+    <linearGradient id="parchmentBanner" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FDFBF7"/>
+      <stop offset="50%" stop-color="#F7EEDC"/>
+      <stop offset="100%" stop-color="#ECE0C5"/>
+    </linearGradient>
+
+    <!-- Reusable Gold Star -->
+    <g id="goldStar">
+      <polygon points="0,-7 2,-2 7,-2 3,2 5,7 0,3.5 -5,7 -3,2 -7,-2 -2,-2" fill="url(#goldBright)"/>
+    </g>
+
+    <!-- Reusable Palmette / Acanthus Leaf Motif -->
+    <g id="acanthusScroll">
+      <path d="M 0,0 C 25,-15 50,-5 65,15 C 45,15 30,5 0,0 Z" fill="url(#goldGradient)" stroke="#744D0F" stroke-width="1"/>
+      <path d="M 5,8 C 30,-2 55,8 70,30 C 50,28 35,16 5,8 Z" fill="url(#goldBright)" stroke="#744D0F" stroke-width="0.8"/>
+    </g>
+  </defs>
+
+  <!-- 1. DEEP NAVY BLUE BACKGROUND -->
+  <rect width="1600" height="900" fill="url(#bgNavy)"/>
+
+  <!-- 2. GOLD OUTER BORDER FRAME WITH CORNER STARS -->
+  <rect x="25" y="25" width="1550" height="850" rx="16" fill="none" stroke="url(#goldGradient)" stroke-width="4.5"/>
+  <rect x="36" y="36" width="1528" height="828" rx="10" fill="none" stroke="url(#goldGradient)" stroke-width="1.2" opacity="0.8"/>
+  <rect x="42" y="42" width="1516" height="816" rx="8" fill="none" stroke="url(#goldBright)" stroke-width="1" stroke-dasharray="2,5" opacity="0.4"/>
+
+  <!-- Border Corner Stars -->
+  <polygon points="75,70 78,78 86,78 80,83 82,91 75,86 68,91 70,83 64,78 72,78" fill="url(#goldBright)"/>
+  <polygon points="1525,70 1528,78 1536,78 1530,83 1532,91 1525,86 1518,91 1520,83 1514,78 1522,78" fill="url(#goldBright)"/>
+  <polygon points="75,825 78,833 86,833 80,838 82,846 75,841 68,846 70,838 64,833 72,833" fill="url(#goldBright)"/>
+  <polygon points="1525,825 1528,833 1536,833 1530,838 1532,846 1525,841 1518,846 1520,838 1514,833 1522,833" fill="url(#goldBright)"/>
+
+  <!-- Top Center Medallion Star -->
+  <g transform="translate(800, 36)">
+    <circle cx="0" cy="0" r="18" fill="#081426" stroke="url(#goldGradient)" stroke-width="2"/>
+    <polygon points="0,-11 3,-3 11,-3 5,2 7,10 0,5 -7,10 -5,2 -11,-3 -3,-3" fill="url(#goldBright)"/>
+  </g>
+
+  <!-- Stars along top and bottom borders -->
+  <!-- Top stars -->
+  <use href="#goldStar" xlink:href="#goldStar" x="180" y="34"/>
+  <use href="#goldStar" xlink:href="#goldStar" x="260" y="34"/>
+  <use href="#goldStar" xlink:href="#goldStar" x="340" y="34"/>
+  <use href="#goldStar" xlink:href="#goldStar" x="420" y="34"/>
+  <use href="#goldStar" xlink:href="#goldStar" x="500" y="34"/>
+  <use href="#goldStar" xlink:href="#goldStar" x="580" y="34"/>
+  <use href="#goldStar" xlink:href="#goldStar" x="660" y="34"/>
+  <use href="#goldStar" xlink:href="#goldStar" x="940" y="34"/>
+  <use href="#goldStar" xlink:href="#goldStar" x="1020" y="34"/>
+  <use href="#goldStar" xlink:href="#goldStar" x="1100" y="34"/>
+  <use href="#goldStar" xlink:href="#goldStar" x="1180" y="34"/>
+  <use href="#goldStar" xlink:href="#goldStar" x="1260" y="34"/>
+  <use href="#goldStar" xlink:href="#goldStar" x="1340" y="34"/>
+  <use href="#goldStar" xlink:href="#goldStar" x="1420" y="34"/>
+
+  <!-- Bottom stars -->
+  <use href="#goldStar" xlink:href="#goldStar" x="180" y="866"/>
+  <use href="#goldStar" xlink:href="#goldStar" x="260" y="866"/>
+  <use href="#goldStar" xlink:href="#goldStar" x="340" y="866"/>
+  <use href="#goldStar" xlink:href="#goldStar" x="420" y="866"/>
+  <use href="#goldStar" xlink:href="#goldStar" x="500" y="866"/>
+  <use href="#goldStar" xlink:href="#goldStar" x="580" y="866"/>
+  <use href="#goldStar" xlink:href="#goldStar" x="660" y="866"/>
+  <use href="#goldStar" xlink:href="#goldStar" x="740" y="866"/>
+  <use href="#goldStar" xlink:href="#goldStar" x="860" y="866"/>
+  <use href="#goldStar" xlink:href="#goldStar" x="940" y="866"/>
+  <use href="#goldStar" xlink:href="#goldStar" x="1020" y="866"/>
+  <use href="#goldStar" xlink:href="#goldStar" x="1100" y="866"/>
+  <use href="#goldStar" xlink:href="#goldStar" x="1180" y="866"/>
+  <use href="#goldStar" xlink:href="#goldStar" x="1260" y="866"/>
+  <use href="#goldStar" xlink:href="#goldStar" x="1340" y="866"/>
+  <use href="#goldStar" xlink:href="#goldStar" x="1420" y="866"/>
+
+  <!-- Left & Right Stars -->
+  <use href="#goldStar" xlink:href="#goldStar" x="34" y="160"/>
+  <use href="#goldStar" xlink:href="#goldStar" x="34" y="260"/>
+  <use href="#goldStar" xlink:href="#goldStar" x="34" y="360"/>
+  <use href="#goldStar" xlink:href="#goldStar" x="34" y="460"/>
+  <use href="#goldStar" xlink:href="#goldStar" x="34" y="560"/>
+  <use href="#goldStar" xlink:href="#goldStar" x="34" y="660"/>
+  <use href="#goldStar" xlink:href="#goldStar" x="34" y="760"/>
+
+  <use href="#goldStar" xlink:href="#goldStar" x="1566" y="160"/>
+  <use href="#goldStar" xlink:href="#goldStar" x="1566" y="260"/>
+  <use href="#goldStar" xlink:href="#goldStar" x="1566" y="360"/>
+  <use href="#goldStar" xlink:href="#goldStar" x="1566" y="460"/>
+  <use href="#goldStar" xlink:href="#goldStar" x="1566" y="560"/>
+  <use href="#goldStar" xlink:href="#goldStar" x="1566" y="660"/>
+  <use href="#goldStar" xlink:href="#goldStar" x="1566" y="760"/>
+
+  <!-- Top-Left Corner Star Medallion -->
+  <g transform="translate(85, 85)">
+    <circle cx="0" cy="0" r="28" fill="none" stroke="url(#goldGradient)" stroke-width="2.5"/>
+    <circle cx="0" cy="0" r="22" fill="none" stroke="url(#goldBright)" stroke-width="1" stroke-dasharray="2,3"/>
+    <polygon points="0,-14 4,-4 14,-4 6,3 9,13 0,7 -9,13 -6,3 -14,-4 -4,-4" fill="url(#goldGradient)"/>
+  </g>
+  <!-- Top-Right Corner Star Medallion -->
+  <g transform="translate(1515, 85)">
+    <circle cx="0" cy="0" r="28" fill="none" stroke="url(#goldGradient)" stroke-width="2.5"/>
+    <circle cx="0" cy="0" r="22" fill="none" stroke="url(#goldBright)" stroke-width="1" stroke-dasharray="2,3"/>
+    <polygon points="0,-14 4,-4 14,-4 6,3 9,13 0,7 -9,13 -6,3 -14,-4 -4,-4" fill="url(#goldGradient)"/>
+  </g>
+
+  <!-- ======================================================== -->
+  <!-- 3. LEFT COLUMN: GILDED OVAL BAROQUE FRAME                -->
+  <!-- (Portrait will be composited inside cx=320, cy=445)      -->
+  <!-- ======================================================== -->
+  <g>
+    <!-- Acanthus Flourish Wings Left -->
+    <path d="M 120,445 C 75,350 85,220 155,145 C 180,115 235,85 320,80 C 255,110 195,145 165,225 C 135,305 135,405 160,475 C 120,515 90,585 105,685 C 120,755 175,815 265,840 C 195,830 140,775 115,695 C 90,625 95,525 120,445 Z" 
+          fill="url(#goldGradient)" stroke="#7A5210" stroke-width="1.8"/>
+
+    <!-- Acanthus Flourish Wings Right -->
+    <path d="M 520,445 C 565,350 555,220 485,145 C 460,115 405,85 320,80 C 385,110 445,145 475,225 C 505,305 505,405 480,475 C 520,515 550,585 535,685 C 520,755 465,815 375,840 C 445,830 500,775 525,695 C 550,625 545,525 520,445 Z" 
+          fill="url(#goldGradient)" stroke="#7A5210" stroke-width="1.8"/>
+
+    <!-- Top Shell Palmette Crest -->
+    <g transform="translate(320, 80)">
+      <path d="M 0,-30 C -28,-20 -40,5 -32,24 C -16,14 0,18 0,30 C 0,18 16,14 32,24 C 40,5 28,-20 0,-30 Z" 
+            fill="url(#goldBright)" stroke="#7A5210" stroke-width="1.5"/>
+      <circle cx="0" cy="8" r="5" fill="#FFF2C6"/>
+      <circle cx="-18" cy="16" r="3.5" fill="#E2B755"/>
+      <circle cx="18" cy="16" r="3.5" fill="#E2B755"/>
+    </g>
+
+    <!-- Bottom Shell Cartouche Crest -->
+    <g transform="translate(320, 810)">
+      <path d="M 0,30 C -28,20 -40,-5 -32,-24 C -16,-14 0,-18 0,-30 C 0,-18 16,-14 32,-24 C 40,-5 28,20 0,30 Z" 
+            fill="url(#goldBright)" stroke="#7A5210" stroke-width="1.5"/>
+      <circle cx="0" cy="-8" r="5" fill="#FFF2C6"/>
+      <circle cx="-18" cy="-16" r="3.5" fill="#E2B755"/>
+      <circle cx="18" cy="-16" r="3.5" fill="#E2B755"/>
+    </g>
+
+    <!-- Heavy Relief Gold Oval Rings -->
+    <!-- Outer Deep Shadow Groove -->
+    <ellipse cx="320" cy="445" rx="226" ry="296" fill="none" stroke="#4F3306" stroke-width="4"/>
+    <!-- Outer Bullnose Gold Moulding -->
+    <ellipse cx="320" cy="445" rx="218" ry="288" fill="none" stroke="url(#goldGradient)" stroke-width="18"/>
+    <!-- Middle Dark Groove -->
+    <ellipse cx="320" cy="445" rx="205" ry="275" fill="none" stroke="#68420A" stroke-width="3"/>
+    <!-- Inner High-Relief Bevel -->
+    <ellipse cx="320" cy="445" rx="194" ry="264" fill="none" stroke="url(#goldBright)" stroke-width="14"/>
+    <!-- Beaded Pearl Circle -->
+    <ellipse cx="320" cy="445" rx="184" ry="254" fill="none" stroke="#FFF2C6" stroke-width="4.5" stroke-dasharray="4,7"/>
+    <!-- Inset Frame Bevel (Overlaps the portrait edge at rx=175, ry=245) -->
+    <ellipse cx="320" cy="445" rx="178" ry="248" fill="none" stroke="#4A2F05" stroke-width="4"/>
+  </g>
+
+  <!-- ======================================================== -->
+  <!-- 4. TOP RIGHT: TITLE & SUBTITLE SECTION                   -->
+  <!-- ======================================================== -->
+  <g transform="translate(1090, 85)" text-anchor="middle">
+    <!-- NIKOLA TESLA -->
+    <text x="3" y="65" font-family="'Times New Roman', Georgia, serif" font-size="76" font-weight="bold" letter-spacing="6" fill="#040912" opacity="0.8">NIKOLA TESLA</text>
+    <text x="0" y="62" font-family="'Times New Roman', Georgia, serif" font-size="76" font-weight="bold" letter-spacing="6" fill="#D4A446">NIKOLA TESLA</text>
+    <text x="0" y="60" font-family="'Times New Roman', Georgia, serif" font-size="76" font-weight="bold" letter-spacing="6" fill="#F8F2E2">NIKOLA TESLA</text>
+
+    <!-- Dates: 1856 – 1943 -->
+    <g transform="translate(0, 105)">
+      <line x1="-130" y1="-5" x2="-25" y2="-5" stroke="url(#goldGradient)" stroke-width="1.8"/>
+      <circle cx="-18" cy="-5" r="3" fill="#E2B755"/>
+      <text x="0" y="2" font-family="Georgia, serif" font-size="28" font-weight="normal" letter-spacing="3" fill="#E5D5B8">1856 – 1943</text>
+      <circle cx="18" cy="-5" r="3" fill="#E2B755"/>
+      <line x1="25" y1="-5" x2="130" y2="-5" stroke="url(#goldGradient)" stroke-width="1.8"/>
+    </g>
+
+    <!-- Subtitle Banner: VISIONARY INVENTOR & ELECTRICAL ENGINEER -->
+    <g transform="translate(0, 142)">
+      <path d="M -295,-6 L -318,-19 L -306,0 L -318,19 L -295,6 Z" fill="#936416"/>
+      <path d="M -265,-19 L -295,-19 L -285,0 L -295,19 L -265,19 Z" fill="url(#goldGradient)" stroke="#6A460A" stroke-width="1"/>
+      <path d="M 295,-6 L 318,-19 L 306,0 L 318,19 L 295,6 Z" fill="#936416"/>
+      <path d="M 265,-19 L 295,-19 L 285,0 L 295,19 L 265,19 Z" fill="url(#goldGradient)" stroke="#6A460A" stroke-width="1"/>
+
+      <path d="M -275,-20 C -255,-26 255,-26 275,-20 C 290,-13 290,13 275,20 C 255,26 -255,26 -275,20 C -290,13 -290,-13 -275,-20 Z" 
+            fill="#081427" stroke="url(#goldGradient)" stroke-width="2.5"/>
+      <path d="M -267,-15 C -250,-20 250,-20 267,-15 C 278,-10 278,10 267,15 C 250,20 -250,20 -267,15 C -278,10 -278,-10 -267,-15 Z" 
+            fill="none" stroke="url(#goldBright)" stroke-width="0.9" opacity="0.8"/>
+
+      <text x="0" y="6" font-family="'Times New Roman', Georgia, serif" font-size="19" font-weight="bold" letter-spacing="3" fill="#F8F2E2">VISIONARY INVENTOR &amp; ELECTRICAL ENGINEER</text>
+    </g>
+  </g>
+
+  <!-- ======================================================== -->
+  <!-- 5. 2x2 GRID OF 4 MILESTONE PARCHMENT CARDS               -->
+  <!-- ======================================================== -->
+
+  <!-- CARD 1: 1888 — AC INDUCTION MOTOR (Row 1, Col 1) -->
+  <g transform="translate(680, 290)">
+    <rect x="0" y="0" width="395" height="155" rx="10" fill="url(#parchmentCard)" stroke="url(#goldGradient)" stroke-width="2.2"/>
+    <rect x="4" y="4" width="387" height="147" rx="7" fill="none" stroke="#C49B45" stroke-width="0.8" opacity="0.6"/>
+
+    <!-- Medallion Left -->
+    <g transform="translate(42, 50)">
+      <circle cx="0" cy="0" r="42" fill="url(#goldBright)" stroke="#68470E" stroke-width="2"/>
+      <circle cx="0" cy="0" r="34" fill="none" stroke="#FFE9A5" stroke-width="1.8"/>
+      <circle cx="0" cy="0" r="30" fill="#0D1E36" stroke="url(#goldGradient)" stroke-width="1.5"/>
+      <text x="0" y="7" font-family="Georgia, serif" font-size="19" font-weight="bold" text-anchor="middle" fill="#FFE59E" letter-spacing="1">1888</text>
+    </g>
+
+    <!-- Title & Content -->
+    <text x="96" y="38" font-family="'Times New Roman', Georgia, serif" font-size="18" font-weight="bold" fill="#0D192B">
+      1888: AC INDUCTION MOTOR
+    </text>
+    <line x1="96" y1="48" x2="375" y2="48" stroke="#D1B88E" stroke-width="0.8"/>
+    <text x="96" y="70" font-family="Georgia, serif" font-size="13.5" fill="#334155">
+      This groundbreaking invention laid the
+    </text>
+    <text x="96" y="90" font-family="Georgia, serif" font-size="13.5" fill="#334155">
+      foundation for the Alternating Current
+    </text>
+    <text x="96" y="110" font-family="Georgia, serif" font-size="13.5" fill="#334155">
+      (AC) system, enabling efficient,
+    </text>
+    <text x="96" y="130" font-family="Georgia, serif" font-size="13.5" fill="#334155">
+      long-distance power transmission.
+    </text>
+  </g>
+
+  <!-- CARD 2: 1893 — NIAGARA FALLS POWER PROJECT (Row 1, Col 2) -->
+  <g transform="translate(1125, 290)">
+    <rect x="0" y="0" width="395" height="155" rx="10" fill="url(#parchmentCard)" stroke="url(#goldGradient)" stroke-width="2.2"/>
+    <rect x="4" y="4" width="387" height="147" rx="7" fill="none" stroke="#C49B45" stroke-width="0.8" opacity="0.6"/>
+
+    <g transform="translate(42, 50)">
+      <circle cx="0" cy="0" r="42" fill="url(#goldBright)" stroke="#68470E" stroke-width="2"/>
+      <circle cx="0" cy="0" r="34" fill="none" stroke="#FFE9A5" stroke-width="1.8"/>
+      <circle cx="0" cy="0" r="30" fill="#0D1E36" stroke="url(#goldGradient)" stroke-width="1.5"/>
+      <text x="0" y="7" font-family="Georgia, serif" font-size="19" font-weight="bold" text-anchor="middle" fill="#FFE59E" letter-spacing="1">1893</text>
+    </g>
+
+    <text x="96" y="32" font-family="'Times New Roman', Georgia, serif" font-size="16.5" font-weight="bold" fill="#0D192B">
+      1893: NIAGARA FALLS
+    </text>
+    <text x="96" y="50" font-family="'Times New Roman', Georgia, serif" font-size="16.5" font-weight="bold" fill="#0D192B">
+      POWER PROJECT
+    </text>
+    <line x1="96" y1="58" x2="375" y2="58" stroke="#D1B88E" stroke-width="0.8"/>
+    <text x="96" y="78" font-family="Georgia, serif" font-size="13.5" fill="#334155">
+      Tesla's polyphase system was chosen
+    </text>
+    <text x="96" y="98" font-family="Georgia, serif" font-size="13.5" fill="#334155">
+      to generate electricity from the falls,
+    </text>
+    <text x="96" y="118" font-family="Georgia, serif" font-size="13.5" fill="#334155">
+      pioneering widespread commercial
+    </text>
+    <text x="96" y="138" font-family="Georgia, serif" font-size="13.5" fill="#334155">
+      power use.
+    </text>
+  </g>
+
+  <!-- CARD 3: 1898 — REMOTE-CONTROL BOAT DEMONSTRATION (Row 2, Col 1) -->
+  <g transform="translate(680, 490)">
+    <rect x="0" y="0" width="395" height="155" rx="10" fill="url(#parchmentCard)" stroke="url(#goldGradient)" stroke-width="2.2"/>
+    <rect x="4" y="4" width="387" height="147" rx="7" fill="none" stroke="#C49B45" stroke-width="0.8" opacity="0.6"/>
+
+    <g transform="translate(42, 50)">
+      <circle cx="0" cy="0" r="42" fill="url(#goldBright)" stroke="#68470E" stroke-width="2"/>
+      <circle cx="0" cy="0" r="34" fill="none" stroke="#FFE9A5" stroke-width="1.8"/>
+      <circle cx="0" cy="0" r="30" fill="#0D1E36" stroke="url(#goldGradient)" stroke-width="1.5"/>
+      <text x="0" y="7" font-family="Georgia, serif" font-size="19" font-weight="bold" text-anchor="middle" fill="#FFE59E" letter-spacing="1">1898</text>
+    </g>
+
+    <text x="96" y="32" font-family="'Times New Roman', Georgia, serif" font-size="16" font-weight="bold" fill="#0D192B">
+      1898: REMOTE-CONTROL
+    </text>
+    <text x="96" y="50" font-family="'Times New Roman', Georgia, serif" font-size="16" font-weight="bold" fill="#0D192B">
+      BOAT DEMONSTRATION
+    </text>
+    <line x1="96" y1="58" x2="375" y2="58" stroke="#D1B88E" stroke-width="0.8"/>
+    <text x="96" y="78" font-family="Georgia, serif" font-size="13.5" fill="#334155">
+      He publicly demonstrated a wireless,
+    </text>
+    <text x="96" y="98" font-family="Georgia, serif" font-size="13.5" fill="#334155">
+      remotely-controlled boat at Madison
+    </text>
+    <text x="96" y="118" font-family="Georgia, serif" font-size="13.5" fill="#334155">
+      Square Garden, pioneering robotics
+    </text>
+    <text x="96" y="138" font-family="Georgia, serif" font-size="13.5" fill="#334155">
+      and guided systems.
+    </text>
+  </g>
+
+  <!-- CARD 4: c. 1901 — WARDENCLYFFE TOWER CONSTRUCTION (Row 2, Col 2) -->
+  <g transform="translate(1125, 490)">
+    <rect x="0" y="0" width="395" height="155" rx="10" fill="url(#parchmentCard)" stroke="url(#goldGradient)" stroke-width="2.2"/>
+    <rect x="4" y="4" width="387" height="147" rx="7" fill="none" stroke="#C49B45" stroke-width="0.8" opacity="0.6"/>
+
+    <g transform="translate(42, 50)">
+      <circle cx="0" cy="0" r="42" fill="url(#goldBright)" stroke="#68470E" stroke-width="2"/>
+      <circle cx="0" cy="0" r="34" fill="none" stroke="#FFE9A5" stroke-width="1.8"/>
+      <circle cx="0" cy="0" r="30" fill="#0D1E36" stroke="url(#goldGradient)" stroke-width="1.5"/>
+      <text x="0" y="6" font-family="Georgia, serif" font-size="16" font-weight="bold" text-anchor="middle" fill="#FFE59E" letter-spacing="0.5">c. 1901</text>
+    </g>
+
+    <text x="96" y="32" font-family="'Times New Roman', Georgia, serif" font-size="16" font-weight="bold" fill="#0D192B">
+      c. 1901: WARDENCLYFFE
+    </text>
+    <text x="96" y="50" font-family="'Times New Roman', Georgia, serif" font-size="16" font-weight="bold" fill="#0D192B">
+      TOWER CONSTRUCTION
+    </text>
+    <line x1="96" y1="58" x2="375" y2="58" stroke="#D1B88E" stroke-width="0.8"/>
+    <text x="96" y="78" font-family="Georgia, serif" font-size="13.5" fill="#334155">
+      Tesla began building a massive tower
+    </text>
+    <text x="96" y="98" font-family="Georgia, serif" font-size="13.5" fill="#334155">
+      to realize his dream of wireless global
+    </text>
+    <text x="96" y="118" font-family="Georgia, serif" font-size="13.5" fill="#334155">
+      communication and power
+    </text>
+    <text x="96" y="138" font-family="Georgia, serif" font-size="13.5" fill="#334155">
+      transmission.
+    </text>
+  </g>
+
+  <!-- ======================================================== -->
+  <!-- 6. BOTTOM BANNER: UNFURLED PARCHMENT BANNER & QUOTE       -->
+  <!-- ======================================================== -->
+  <g transform="translate(800, 775)">
+    <!-- Curled Ribbon Swallowtails Left -->
+    <g transform="translate(-735, 0)">
+      <path d="M 40,40 L 0,65 L 15,35 L 0,5 L 40,30 Z" fill="#B38640"/>
+      <path d="M 60,-5 C 30,-5 10,15 15,40 C 25,20 45,15 70,15 Z" fill="url(#goldGradient)" stroke="#815410" stroke-width="1"/>
+    </g>
+
+    <!-- Curled Ribbon Swallowtails Right -->
+    <g transform="translate(735, 0)">
+      <path d="M -40,40 L 0,65 L -15,35 L 0,5 L -40,30 Z" fill="#B38640"/>
+      <path d="M -60,-5 C -30,-5 -10,15 -15,40 C -25,20 -45,15 -70,15 Z" fill="url(#goldGradient)" stroke="#815410" stroke-width="1"/>
+    </g>
+
+    <!-- Main Parchment Banner Plate -->
+    <path d="M -715,5 C -695,-15 -630,-10 -560,-15 C -360,-20 360,-20 560,-15 C 630,-10 695,-15 715,5 C 730,35 705,65 685,68 C 510,75 -510,75 -685,68 C -705,65 -730,35 -715,5 Z" 
+          fill="url(#parchmentBanner)" stroke="url(#goldGradient)" stroke-width="2.5"/>
+    
+    <circle cx="-685" cy="27" r="4.5" fill="url(#goldBright)" stroke="#744D0F" stroke-width="1"/>
+    <circle cx="685" cy="27" r="4.5" fill="url(#goldBright)" stroke="#744D0F" stroke-width="1"/>
+
+    <!-- Quote Line 1 -->
+    <text x="0" y="25" text-anchor="middle" font-family="'Times New Roman', Georgia, serif" font-size="20" font-weight="bold" font-style="italic" letter-spacing="1" fill="#132035">
+      “THE PROGRESS AND DEVELOPMENT OF MAN ARE ENTIRELY DEPENDENT ON THE INVENTION.”
+    </text>
+    <!-- Quote Author Attribution -->
+    <text x="0" y="53" text-anchor="middle" font-family="Georgia, serif" font-size="17" font-style="italic" fill="#3D4B62">
+      – Nikola Tesla
+    </text>
+  </g>
+</svg>`;
+
+const publicSvgPath = path.join(__dirname, '../public/images/nikola_tesla_infographic.svg');
+const assetSvgPath = path.join(__dirname, '../src/assets/images/nikola_tesla_infographic.svg');
+fs.writeFileSync(publicSvgPath, svg);
+fs.writeFileSync(assetSvgPath, svg);
+
+const outputJpgPath = path.join(__dirname, '../src/assets/images/nikola_tesla_infographic.jpg');
+const publicJpgPath = path.join(__dirname, '../public/images/nikola_tesla_infographic.jpg');
+const publicKeywordJpgPath = path.join(__dirname, '../public/Nikola Tesla inventions that changed the world.jpg');
+const publicKeywordRootPath = path.join(__dirname, '../dist/Nikola Tesla inventions that changed the world.jpg');
+
+// Step 1: Render SVG template
+const baseJpgPath = '/tmp/tesla_base.jpg';
+execSync(`ffmpeg -y -i "${publicSvgPath}" -q:v 2 "${baseJpgPath}"`);
+
+// Step 2: Composite masked oval portrait at x=145, y=200
+const maskPngPath = '/tmp/oval_mask.png';
+const portraitJpgPath = path.join(__dirname, '../src/assets/images/tesla_portrait_oval.jpg');
+
+execSync(`ffmpeg -y -f lavfi -i "color=black:s=350x490,format=rgba" -vf "geq=r='if(lte(pow((X-175)/175,2)+pow((Y-245)/245,2),1),255,0)':g='if(lte(pow((X-175)/175,2)+pow((Y-245)/245,2),1),255,0)':b='if(lte(pow((X-175)/175,2)+pow((Y-245)/245,2),1),255,0)'" -vframes 1 "${maskPngPath}"`);
+
+execSync(`ffmpeg -y -i "${baseJpgPath}" -i "${portraitJpgPath}" -i "${maskPngPath}" \
+-filter_complex "[1:v]scale=350:490[port];[port][2:v]alphamerge[masked];[0:v][masked]overlay=145:200" \
+-q:v 2 "${outputJpgPath}"`);
+
+fs.copyFileSync(outputJpgPath, publicJpgPath);
+fs.copyFileSync(outputJpgPath, publicKeywordJpgPath);
+try { fs.copyFileSync(outputJpgPath, publicKeywordRootPath); } catch(e){}
+
+console.log('Successfully composited complete Tesla infographic to:', outputJpgPath);

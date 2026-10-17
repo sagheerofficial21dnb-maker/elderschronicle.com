@@ -39,29 +39,44 @@ const renderParagraphWithLinks = (
       elements.push(text.substring(lastIndex, matchStart));
     }
 
-    let targetId = '';
-    if (url.includes('/leaders/')) targetId = url.replace('/leaders/', '');
-    else if (url.includes('/scientists/')) targetId = url.replace('/scientists/', '');
-    else if (url.includes('/philosophers/')) targetId = url.replace('/philosophers/', '');
-    else if (url.includes('/literature/')) targetId = url.replace('/literature/', '');
-    else if (url.includes('/biography/')) targetId = url.replace('/biography/', '');
-    else targetId = url.replace(/^\//, '');
+    if (url.startsWith('http://') || url.startsWith('https://')) {
+      elements.push(
+        <a
+          key={`ext-link-${matchStart}`}
+          href={url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline font-semibold text-blue-900 underline decoration-blue-300 underline-offset-2 hover:text-blue-950 hover:decoration-blue-700 transition-colors"
+          title={`Visit external repository: ${anchorText}`}
+        >
+          {anchorText}
+        </a>
+      );
+    } else {
+      let targetId = '';
+      if (url.includes('/leaders/')) targetId = url.replace('/leaders/', '');
+      else if (url.includes('/scientists/')) targetId = url.replace('/scientists/', '');
+      else if (url.includes('/philosophers/')) targetId = url.replace('/philosophers/', '');
+      else if (url.includes('/literature/')) targetId = url.replace('/literature/', '');
+      else if (url.includes('/biography/')) targetId = url.replace('/biography/', '');
+      else targetId = url.replace(/^\//, '');
 
-    elements.push(
-      <button
-        key={`link-${matchStart}`}
-        type="button"
-        onClick={() => {
-          if (targetId) {
-            onSelectBio(targetId);
-          }
-        }}
-        className="inline font-semibold text-blue-900 underline decoration-blue-300 underline-offset-2 hover:text-blue-950 hover:decoration-blue-700 transition-colors cursor-pointer text-left"
-        title={`Read biographical archive: ${anchorText}`}
-      >
-        {anchorText}
-      </button>
-    );
+      elements.push(
+        <button
+          key={`link-${matchStart}`}
+          type="button"
+          onClick={() => {
+            if (targetId) {
+              onSelectBio(targetId);
+            }
+          }}
+          className="inline font-semibold text-blue-900 underline decoration-blue-300 underline-offset-2 hover:text-blue-950 hover:decoration-blue-700 transition-colors cursor-pointer text-left"
+          title={`Read biographical archive: ${anchorText}`}
+        >
+          {anchorText}
+        </button>
+      );
+    }
 
     lastIndex = matchStart + fullMatch.length;
   }
@@ -339,11 +354,13 @@ export const SinglePostView: React.FC<SinglePostViewProps> = ({
 
         {/* Featured Archival Hero Artwork with Caption */}
         <figure className="my-8">
-          <div className="relative aspect-[16/9] bg-slate-900 rounded-lg overflow-hidden border border-slate-200">
+          <div className="relative aspect-[16/9] bg-slate-900 rounded-lg overflow-hidden border border-slate-200 shadow-sm">
             <img
               src={biography.coverImage}
               alt={biography.id === 'napoleon-bonaparte'
                 ? "Archival historical infographic poster of Napoleon Bonaparte showing his portrait, key career milestones from 1799 to 1815, and famous quote over a deep navy and gold background"
+                : biography.id === 'nikola-tesla'
+                ? "Archival historical infographic poster of Nikola Tesla showing his portrait, key career milestones from 1888 to 1901, and famous quote over a deep navy and gold background"
                 : `Historical archive photograph of ${biography.name}`}
               className="w-full h-full object-cover object-center"
               referrerPolicy="no-referrer"
@@ -352,6 +369,8 @@ export const SinglePostView: React.FC<SinglePostViewProps> = ({
           <figcaption className="text-xs text-slate-500 font-serif italic mt-2.5 text-center">
             {biography.id === 'napoleon-bonaparte'
               ? "Figure 1: Historic overview and key milestones of Napoleon Bonaparte's life and reign."
+              : biography.id === 'nikola-tesla'
+              ? "Figure 1: Historic overview and key milestones of Nikola Tesla's life, inventions, and electrical legacy."
               : `Fig. 1 — Archival portrait and document study of ${biography.name} (${biography.dates}). Preserved in national manuscript collections.`}
           </figcaption>
         </figure>

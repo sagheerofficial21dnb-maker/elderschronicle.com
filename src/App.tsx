@@ -14,7 +14,7 @@ import { BookOpen, Sparkles, Filter, ChevronRight, LayoutGrid, List } from 'luci
 
 export default function App() {
   const [currentTab, setCurrentTab] = useState<ViewTab>('home');
-  const [activeSlug, setActiveSlug] = useState<string>('napoleon-bonaparte-rise-and-fall');
+  const [activeSlug, setActiveSlug] = useState<string>('nikola-tesla-inventions');
   const [selectedCategory, setSelectedCategory] = useState<CategoryType | 'All'>('All');
   const [selectedEra, setSelectedEra] = useState<string>('All Eras');
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -93,14 +93,22 @@ export default function App() {
     setSelectedCategory(category);
     if (category !== 'All') {
       setCurrentTab('category');
+    } else {
+      setCurrentTab('home');
     }
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleNavigateTab = (tab: ViewTab) => {
     setCurrentTab(tab);
+    if (tab === 'home') {
+      setSelectedCategory('All');
+    }
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
+
+  // The hero section component is rendered exclusively on the home page
+  const isHomePage = currentTab === 'home' && selectedCategory === 'All';
 
   return (
     <div className="min-h-screen flex flex-col bg-white text-slate-900 selection:bg-amber-100 selection:text-amber-950 font-sans">
@@ -116,8 +124,8 @@ export default function App() {
         onOpenComplianceModal={() => setComplianceModalOpen(true)}
       />
 
-      {/* Prominent Archival Hero Banner right below Header */}
-      {(currentTab === 'home' || currentTab === 'category') && (
+      {/* Hero Section Component - Rendered Exclusively on the Home Page */}
+      {isHomePage && (
         <ArchivalHeroBanner
           currentTab={currentTab}
           onSelectCategory={handleSelectCategory}
@@ -186,11 +194,18 @@ export default function App() {
             {/* Category Header (if in category mode) */}
             {currentTab === 'category' && selectedCategory !== 'All' && (
               <header className="mb-6 border-b border-slate-200 pb-4">
-                <div className="flex items-center gap-2 text-xs text-blue-900 font-semibold uppercase tracking-wider mb-1">
-                  <span>Archival Discipline</span>
-                  <span>/</span>
-                  <span>Curated Anthology</span>
-                </div>
+                <nav aria-label="Breadcrumbs" className="flex items-center gap-2 text-xs text-blue-900 font-semibold uppercase tracking-wider mb-2">
+                  <button
+                    onClick={() => handleNavigateTab('home')}
+                    className="hover:underline text-slate-500 hover:text-blue-950 transition-colors cursor-pointer"
+                  >
+                    Archive Home
+                  </button>
+                  <span className="text-slate-400">/</span>
+                  <span className="text-slate-500">Archival Discipline</span>
+                  <span className="text-slate-400">/</span>
+                  <span className="text-blue-950 font-bold">{selectedCategory}</span>
+                </nav>
                 <h1 className="text-3xl font-serif font-bold text-slate-950">
                   {selectedCategory}
                 </h1>
