@@ -428,7 +428,7 @@ export const SinglePostView: React.FC<SinglePostViewProps> = ({
                   return (
                     <div
                       key={pIdx}
-                      className="my-6"
+                      className="my-1"
                       dangerouslySetInnerHTML={{ __html: paragraph }}
                     />
                   );
