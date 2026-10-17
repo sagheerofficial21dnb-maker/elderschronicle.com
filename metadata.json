@@ -1,0 +1,6 @@
+{
+  "name": "Elders Chronicle",
+  "description": "Unfolding the Timeless Legacies & Biographies of History’s Greatest Figures. High-authority historical biographies, archival analysis, and editorial profiles.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
