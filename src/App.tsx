@@ -14,7 +14,7 @@ import { BookOpen, Sparkles, Filter, ChevronRight, LayoutGrid, List } from 'luci
 
 export default function App() {
   const [currentTab, setCurrentTab] = useState<ViewTab>('home');
-  const [activeSlug, setActiveSlug] = useState<string>('nikola-tesla-inventions');
+  const [activeSlug, setActiveSlug] = useState<string>('');
   const [selectedCategory, setSelectedCategory] = useState<CategoryType | 'All'>('All');
   const [selectedEra, setSelectedEra] = useState<string>('All Eras');
   const [searchQuery, setSearchQuery] = useState<string>('');

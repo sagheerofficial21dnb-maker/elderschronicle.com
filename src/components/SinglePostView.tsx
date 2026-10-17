@@ -361,8 +361,10 @@ export const SinglePostView: React.FC<SinglePostViewProps> = ({
                 ? "Archival historical infographic poster of Napoleon Bonaparte showing his portrait, key career milestones from 1799 to 1815, and famous quote over a deep navy and gold background"
                 : biography.id === 'nikola-tesla'
                 ? "Archival historical infographic poster of Nikola Tesla showing his portrait, key career milestones from 1888 to 1901, and famous quote over a deep navy and gold background"
+                : biography.id === 'william-shakespeare'
+                ? "Archival Chandos portrait of playwright and poet William Shakespeare (c. 1600–1610), attributed to John Taylor, preserved in the National Portrait Gallery, London"
                 : `Historical archive photograph of ${biography.name}`}
-              className="w-full h-full object-cover object-center"
+              className={`w-full h-full object-cover ${biography.id === 'william-shakespeare' ? 'object-[center_20%]' : 'object-center'}`}
               referrerPolicy="no-referrer"
             />
           </div>
@@ -371,6 +373,8 @@ export const SinglePostView: React.FC<SinglePostViewProps> = ({
               ? "Figure 1: Historic overview and key milestones of Napoleon Bonaparte's life and reign."
               : biography.id === 'nikola-tesla'
               ? "Figure 1: Historic overview and key milestones of Nikola Tesla's life, inventions, and electrical legacy."
+              : biography.id === 'william-shakespeare'
+              ? "Fig. 1 — Archival Chandos portrait of William Shakespeare (c. 1600–1610), attributed to John Taylor. The primary verified portrait of the dramatist, permanently curated in the National Portrait Gallery, London."
               : `Fig. 1 — Archival portrait and document study of ${biography.name} (${biography.dates}). Preserved in national manuscript collections.`}
           </figcaption>
         </figure>
@@ -416,14 +420,77 @@ export const SinglePostView: React.FC<SinglePostViewProps> = ({
                 {idx + 1}. {section.heading}
               </h2>
 
-              {section.content.map((paragraph, pIdx) => (
-                <p 
-                  key={pIdx} 
-                  className={`mb-5 ${idx === 0 && pIdx === 0 ? 'drop-cap' : ''}`}
-                >
-                  {renderParagraphWithLinks(paragraph, onSelectBiography)}
-                </p>
-              ))}
+              {section.content.map((paragraph, pIdx) => {
+                const trimmed = paragraph.trim();
+
+                // 1. Raw HTML Callout Box (Counterfactual Q&A Section)
+                if (trimmed.startsWith('<div')) {
+                  return (
+                    <div
+                      key={pIdx}
+                      className="my-6"
+                      dangerouslySetInnerHTML={{ __html: paragraph }}
+                    />
+                  );
+                }
+
+                // 2. Markdown Blockquote
+                if (trimmed.startsWith('>')) {
+                  const quoteLines = trimmed.split('\n').map(l => l.replace(/^>\s*/, '')).join('\n');
+                  return (
+                    <blockquote
+                      key={pIdx}
+                      className="my-6 pl-4 border-l-4 border-amber-600 italic text-slate-800 bg-amber-50/70 p-4 rounded-r font-serif text-lg sm:text-xl leading-relaxed shadow-2xs"
+                    >
+                      {renderParagraphWithLinks(quoteLines, onSelectBiography)}
+                    </blockquote>
+                  );
+                }
+
+                // 3. Structured Markdown Table
+                if (trimmed.startsWith('|')) {
+                  const rows = trimmed.split('\n').map(r => r.trim()).filter(Boolean);
+                  const validRows = rows.filter(r => !r.match(/^\|?\s*[-:]+[-| :]*$/));
+                  if (validRows.length >= 2) {
+                    const headerCols = validRows[0].split('|').map(c => c.trim()).filter(Boolean);
+                    const bodyRows = validRows.slice(1).map(r => r.split('|').map(c => c.trim()).filter(Boolean));
+                    return (
+                      <div key={pIdx} className="my-6 border border-slate-200 rounded-lg overflow-x-auto shadow-2xs font-sans">
+                        <table className="w-full text-left border-collapse text-xs">
+                          <thead>
+                            <tr className="bg-slate-100 border-b border-slate-200 text-slate-800 font-bold uppercase tracking-wider text-[11px]">
+                              {headerCols.map((col, cIdx) => (
+                                <th key={cIdx} className="py-3 px-4 whitespace-nowrap">{col}</th>
+                              ))}
+                            </tr>
+                          </thead>
+                          <tbody className="divide-y divide-slate-100 bg-white">
+                            {bodyRows.map((row, rIdx) => (
+                              <tr key={rIdx} className="hover:bg-slate-50 transition-colors">
+                                {row.map((cell, cIdx) => (
+                                  <td key={cIdx} className={`py-3 px-4 ${cIdx === 0 ? 'font-mono font-bold text-blue-950 whitespace-nowrap' : cIdx === 1 ? 'font-semibold text-slate-900' : 'text-slate-600'}`}>
+                                    {renderParagraphWithLinks(cell, onSelectBiography)}
+                                  </td>
+                                ))}
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    );
+                  }
+                }
+
+                // 4. Standard Paragraph
+                return (
+                  <p 
+                    key={pIdx} 
+                    className={`mb-5 ${idx === 0 && pIdx === 0 ? 'drop-cap' : ''}`}
+                  >
+                    {renderParagraphWithLinks(paragraph, onSelectBiography)}
+                  </p>
+                );
+              })}
 
               {/* Quotation Callout Box after Section 1 */}
               {idx === 0 && (
