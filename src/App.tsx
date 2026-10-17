@@ -14,7 +14,7 @@ import { BookOpen, Sparkles, Filter, ChevronRight, LayoutGrid, List } from 'luci
 
 export default function App() {
   const [currentTab, setCurrentTab] = useState<ViewTab>('home');
-  const [activeSlug, setActiveSlug] = useState<string>('');
+  const [activeSlug, setActiveSlug] = useState<string>('mahatma-gandhi');
   const [selectedCategory, setSelectedCategory] = useState<CategoryType | 'All'>('All');
   const [selectedEra, setSelectedEra] = useState<string>('All Eras');
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -24,13 +24,18 @@ export default function App() {
   // Active biography object (safely handle empty array)
   const activeBiography = useMemo(() => {
     if (BIOGRAPHIES.length === 0) return null;
+    const cleanSlug = activeSlug.toLowerCase().replace(/^\/?(leaders|scientists|philosophers|literature|literary|biography)\//, '').replace(/^\//, '');
     return (
       BIOGRAPHIES.find(
         (b) =>
+          b.slug === cleanSlug ||
+          b.id === cleanSlug ||
           b.slug === activeSlug ||
           b.id === activeSlug ||
-          b.slug.includes(activeSlug) ||
-          b.id.includes(activeSlug)
+          b.slug.includes(cleanSlug) ||
+          b.id.includes(cleanSlug) ||
+          cleanSlug.includes(b.slug) ||
+          cleanSlug.includes(b.id)
       ) || BIOGRAPHIES[0] || null
     );
   }, [activeSlug]);

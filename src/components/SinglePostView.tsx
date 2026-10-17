@@ -58,6 +58,7 @@ const renderParagraphWithLinks = (
       else if (url.includes('/scientists/')) targetId = url.replace('/scientists/', '');
       else if (url.includes('/philosophers/')) targetId = url.replace('/philosophers/', '');
       else if (url.includes('/literature/')) targetId = url.replace('/literature/', '');
+      else if (url.includes('/literary/')) targetId = url.replace('/literary/', '');
       else if (url.includes('/biography/')) targetId = url.replace('/biography/', '');
       else targetId = url.replace(/^\//, '');
 
@@ -363,6 +364,8 @@ export const SinglePostView: React.FC<SinglePostViewProps> = ({
                 ? "Archival historical infographic poster of Nikola Tesla showing his portrait, key career milestones from 1888 to 1901, and famous quote over a deep navy and gold background"
                 : biography.id === 'william-shakespeare'
                 ? "Archival Chandos portrait of playwright and poet William Shakespeare (c. 1600–1610), attributed to John Taylor, preserved in the National Portrait Gallery, London"
+                : biography.id === 'alexander-the-great'
+                ? "Archival mosaic detail from Pompeii depicting Alexander the Great astride Bucephalus during his climactic cavalry charge against King Darius III at the Battle of Issus (333 BC), preserved in the Naples National Archaeological Museum"
                 : `Historical archive photograph of ${biography.name}`}
               className={`w-full h-full object-cover ${biography.id === 'william-shakespeare' ? 'object-[center_20%]' : 'object-center'}`}
               referrerPolicy="no-referrer"
@@ -375,6 +378,10 @@ export const SinglePostView: React.FC<SinglePostViewProps> = ({
               ? "Figure 1: Historic overview and key milestones of Nikola Tesla's life, inventions, and electrical legacy."
               : biography.id === 'william-shakespeare'
               ? "Fig. 1 — Archival Chandos portrait of William Shakespeare (c. 1600–1610), attributed to John Taylor. The primary verified portrait of the dramatist, permanently curated in the National Portrait Gallery, London."
+              : biography.id === 'alexander-the-great'
+              ? "Fig. 1 — The Alexander Mosaic from the House of the Faun, Pompeii (c. 100 BC, after a 4th-century BC Greek painting by Philoxenos of Eretria). Naples National Archaeological Museum."
+              : biography.id === 'mahatma-gandhi'
+              ? "Fig. 1 — Archival photographic portrait of Mohandas Karamchand Gandhi during his campaigns of nonviolent civil resistance. Preserved in the National Archives of India and Sabarmati Memorial Trust."
               : `Fig. 1 — Archival portrait and document study of ${biography.name} (${biography.dates}). Preserved in national manuscript collections.`}
           </figcaption>
         </figure>
