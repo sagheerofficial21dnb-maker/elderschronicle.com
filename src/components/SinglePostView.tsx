@@ -382,6 +382,8 @@ export const SinglePostView: React.FC<SinglePostViewProps> = ({
               ? "Fig. 1 — The Alexander Mosaic from the House of the Faun, Pompeii (c. 100 BC, after a 4th-century BC Greek painting by Philoxenos of Eretria). Naples National Archaeological Museum."
               : biography.id === 'mahatma-gandhi'
               ? "Fig. 1 — Archival photographic portrait of Mohandas Karamchand Gandhi during his campaigns of nonviolent civil resistance. Preserved in the National Archives of India and Sabarmati Memorial Trust."
+              : biography.id === 'george-washington'
+              ? "Fig. 1 — Archival Lansdowne-style oil portrait of George Washington (c. 1796) by Gilbert Stuart, documenting the first Chief Executive. Preserved in national portrait collections."
               : `Fig. 1 — Archival portrait and document study of ${biography.name} (${biography.dates}). Preserved in national manuscript collections.`}
           </figcaption>
         </figure>
